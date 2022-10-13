@@ -1,0 +1,84 @@
+node-find-up (5.0.0-2) unstable; urgency=medium
+
+  * Team upload
+  * Modernize debian/watch
+  * Fix GitHub tags regex
+  * Update standards version to 4.6.0, no changes needed.
+  * Fix filenamemangle
+  * Drop dependency to nodejs
+
+ -- Yadd <yadd@debian.org>  Tue, 16 Nov 2021 15:47:33 +0100
+
+node-find-up (5.0.0-1) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Update standards version to 4.5.0, no changes needed.
+
+  [ Xavier Guimard ]
+  * Bump debhelper compatibility level to 13
+  * Use dh-sequence-nodejs
+  * New upstream version 5.0.0
+  * Enable upstream test using tape instead of ava
+  * Update copyright
+
+ -- Xavier Guimard <yadd@debian.org>  Fri, 30 Oct 2020 09:49:48 +0100
+
+node-find-up (4.1.0-2) unstable; urgency=medium
+
+  * Team upload
+  * Back to unstabe after successful tests
+
+ -- Xavier Guimard <yadd@debian.org>  Fri, 20 Dec 2019 07:02:45 +0100
+
+node-find-up (4.1.0-1) experimental; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Remove obsolete fields Contact, Name from debian/upstream/metadata
+    (already present in machine-readable debian/copyright).
+  * Update standards version to 4.4.1, no changes needed.
+
+  [ Xavier Guimard ]
+  * Add "Rules-Requires-Root: no"
+  * Add debian/gbp.conf
+  * New upstream version 4.1.0
+
+ -- Xavier Guimard <yadd@debian.org>  Wed, 18 Dec 2019 21:47:21 +0100
+
+node-find-up (3.0.0-2) unstable; urgency=medium
+
+  * Reupload to unstable
+  * Switch install to pkg-js-tools
+  * Add myself as an uploader
+  * Bump Standards-Version to 4.4.0
+
+ -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Sat, 10 Aug 2019 16:29:50 +0530
+
+node-find-up (3.0.0-1) experimental; urgency=medium
+
+  * Team upload
+  * New upstream version 3.0.0
+  * Bump debhelper compatibility level to 11
+  * Bump Standards-Version to 4.3.0
+  * Add d/upstream/metadata
+  * Switch test to pkg-js-tools
+  * Update d/copyright
+
+ -- Utkarsh Gupta <guptautkarsh2102@gmail.com>  Sun, 17 Mar 2019 23:50:00 +0530
+
+node-find-up (2.1.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Pirate Praveen <praveen@debian.org>  Thu, 07 Dec 2017 17:41:56 +0530
+
+node-find-up (2.0.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #842175)
+
+ -- Pirate Praveen <praveen@debian.org>  Wed, 26 Oct 2016 22:18:19 +0530

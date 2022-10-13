@@ -1,0 +1,28 @@
+Source: node-find-up
+Section: javascript
+Priority: optional
+Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
+Uploaders:
+ Pirate Praveen <praveen@debian.org>,
+ Utkarsh Gupta <guptautkarsh2102@gmail.com>
+Testsuite: autopkgtest-pkg-nodejs
+Build-Depends: debhelper-compat (= 13)
+ , dh-sequence-nodejs
+ , node-is-path-inside <!nocheck>
+ , node-locate-path
+ , node-tape <!nocheck>
+Standards-Version: 4.6.0
+Homepage: https://github.com/sindresorhus/find-up
+Vcs-Git: https://salsa.debian.org/js-team/node-find-up.git
+Vcs-Browser: https://salsa.debian.org/js-team/node-find-up
+Rules-Requires-Root: no
+
+Package: node-find-up
+Architecture: all
+Depends: ${misc:Depends}
+ , node-locate-path
+Description: Find a file by walking up parent directories
+ find-up helps in finding a file or directory by walking up parent directories.
+ There are related tools, too. CLI for this module is find-up-cli.
+ .
+ Node.js is an event-based server-side JavaScript engine.
