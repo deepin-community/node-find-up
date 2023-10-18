@@ -1,0 +1,3 @@
+mjs2cjs -o findUp.cjs -b index.js
+perl -i -pe 's/node://' findUp.cjs
+cp debian/index.cjs index.cjs

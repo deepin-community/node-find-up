@@ -1,1 +1,3 @@
+patch -p1 -R < debian/patches/export-commonjs-files.patch
 tape test.js
+patch -p1 < debian/patches/export-commonjs-files.patch
