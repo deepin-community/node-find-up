@@ -1,3 +1,49 @@
+node-find-up (6.3.0-7) unstable; urgency=medium
+
+  * Team upload
+  * Add find-up.findUp in commonjs files
+  * Better commonjs export
+
+ -- Yadd <yadd@debian.org>  Fri, 08 Apr 2022 18:18:21 +0200
+
+node-find-up (6.3.0-6) unstable; urgency=medium
+
+  * Team upload
+  * Back to unstable after successful tests
+
+ -- Yadd <yadd@debian.org>  Tue, 29 Mar 2022 10:26:05 +0200
+
+node-find-up (6.3.0-5) experimental; urgency=medium
+
+  * Team upload
+  * Fix commonjs
+
+ -- Yadd <yadd@debian.org>  Sun, 27 Mar 2022 17:46:03 +0200
+
+node-find-up (6.3.0-3) experimental; urgency=medium
+
+  * Team upload
+  * Build commonjs files that expose find-up 5 API
+
+ -- Yadd <yadd@debian.org>  Sun, 27 Mar 2022 14:26:37 +0200
+
+node-find-up (6.3.0-2) experimental; urgency=medium
+
+  * Team upload
+  * Add dependency to node-path-exists (>= 5)
+  * Fix autopkgtest using pkg-js-autopkgtest 0.14.11
+
+ -- Yadd <yadd@debian.org>  Fri, 25 Mar 2022 16:25:22 +0100
+
+node-find-up (6.3.0-1) experimental; urgency=medium
+
+  * Team upload
+  * New upstream version 6.3.0
+  * Require node-locate-path >= 7
+  * Update test
+
+ -- Yadd <yadd@debian.org>  Wed, 23 Mar 2022 17:24:10 +0100
+
 node-find-up (5.0.0-2) unstable; urgency=medium
 
   * Team upload

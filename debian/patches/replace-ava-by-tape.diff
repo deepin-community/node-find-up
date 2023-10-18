@@ -1,29 +1,23 @@
 Description: replace ava by tape
 Author: Xavier Guimard <yadd@debian.org>
 Forwarded: not-needed
-Last-Update: 2020-10-30
+Last-Update: 2022-03-23
 
 --- a/test.js
 +++ b/test.js
-@@ -1,10 +1,9 @@
--import fs from 'fs';
--import path from 'path';
--import {promisify} from 'util';
+@@ -3,9 +3,8 @@
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import {fileURLToPath, pathToFileURL} from 'node:url';
 -import test from 'ava';
--import isPathInside from 'is-path-inside';
++import test from 'tape';
+ import isPathInside from 'is-path-inside';
 -import tempy from 'tempy';
--import findUp from '.';
-+const fs = require('fs');
-+const path = require('path');
-+const {promisify} = require('util');
-+const test = require('tape');
-+const isPathInside = require('is-path-inside');
-+const findUp = require('.');
+ import {findUp, findUpSync, findUpMultiple, findUpMultipleSync, findUpStop, pathExists, pathExistsSync} from './index.js';
  
- const name = {
- 	packageDirectory: 'find-up',
-@@ -41,49 +40,46 @@
- absolute.directoryLink = path.join(absolute.fixtureDirectory, name.directoryLink);
+ const __dirname = path.dirname(fileURLToPath(import.meta.url));
+@@ -54,49 +53,46 @@
+ };
  
  // Create a disjoint directory, used for the not-found tests
 -test.beforeEach(t => {
@@ -45,7 +39,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (child file)', t => {
- 	const foundPath = findUp.sync(name.packageJson);
+ 	const foundPath = findUpSync(name.packageJson);
  
  	t.is(foundPath, absolute.packageJson);
 +	t.end();
@@ -59,7 +53,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (child directory)', t => {
- 	const foundPath = findUp.sync(name.fixtureDirectory, {type: 'directory'});
+ 	const foundPath = findUpSync(name.fixtureDirectory, {type: 'directory'});
  
  	t.is(foundPath, absolute.fixtureDirectory);
 +	t.end();
@@ -72,13 +66,13 @@ Last-Update: 2020-10-30
  });
  
  test('sync (explicit type file)', t => {
- 	t.is(findUp.sync(name.packageJson, {type: 'file'}), absolute.packageJson);
- 	t.is(findUp.sync(name.packageJson, {type: 'directory'}), undefined);
+ 	t.is(findUpSync(name.packageJson, {type: 'file'}), absolute.packageJson);
+ 	t.is(findUpSync(name.packageJson, {type: 'directory'}), undefined);
 +	t.end();
  });
  
  if (!isWindows) {
-@@ -95,6 +91,7 @@
+@@ -108,6 +104,7 @@
  
  		t.is(await findUp(name.directoryLink, {cwd, type: 'directory'}), absolute.directoryLink);
  		t.is(await findUp(name.directoryLink, {cwd, type: 'directory', allowSymlinks: false}), undefined);
@@ -86,31 +80,31 @@ Last-Update: 2020-10-30
  	});
  
  	test('sync (symbolic links)', t => {
-@@ -105,6 +102,7 @@
+@@ -118,6 +115,7 @@
  
- 		t.is(findUp.sync(name.directoryLink, {cwd, type: 'directory'}), absolute.directoryLink);
- 		t.is(findUp.sync(name.directoryLink, {cwd, type: 'directory', allowSymlinks: false}), undefined);
-+		t.end();
+ 		t.is(findUpSync(name.directoryLink, {cwd, type: 'directory'}), absolute.directoryLink);
+ 		t.is(findUpSync(name.directoryLink, {cwd, type: 'directory', allowSymlinks: false}), undefined);
++	t.end();
  	});
  }
  
-@@ -114,6 +112,7 @@
+@@ -132,6 +130,7 @@
+ 		cwd: url.fixtureDirectory,
  	});
- 
- 	t.is(foundPath, absolute.baz);
+ 	t.is(foundPath2, foundPath);
 +	t.end();
  });
  
  test('sync (child file, custom cwd)', t => {
-@@ -122,6 +121,7 @@
+@@ -145,6 +144,7 @@
+ 		cwd: url.fixtureDirectory,
  	});
- 
- 	t.is(foundPath, absolute.baz);
+ 	t.is(foundPath2, foundPath);
 +	t.end();
  });
  
  test('async (child file, array, custom cwd)', async t => {
-@@ -130,6 +130,7 @@
+@@ -153,6 +153,7 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -118,7 +112,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (child file, array, custom cwd)', t => {
-@@ -138,6 +139,7 @@
+@@ -161,6 +162,7 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -126,7 +120,7 @@ Last-Update: 2020-10-30
  });
  
  test('async (first child file, array, custom cwd)', async t => {
-@@ -146,6 +148,7 @@
+@@ -169,6 +171,7 @@
  	});
  
  	t.is(foundPath, absolute.qux);
@@ -134,7 +128,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (first child file, array, custom cwd)', t => {
-@@ -154,6 +157,7 @@
+@@ -177,6 +180,7 @@
  	});
  
  	t.is(foundPath, absolute.qux);
@@ -142,7 +136,7 @@ Last-Update: 2020-10-30
  });
  
  test('async (second child file, array, custom cwd)', async t => {
-@@ -162,6 +166,7 @@
+@@ -185,6 +189,7 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -150,7 +144,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (second child file, array, custom cwd)', t => {
-@@ -170,8 +175,10 @@
+@@ -193,8 +198,10 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -161,15 +155,25 @@ Last-Update: 2020-10-30
  test('async (cwd)', async t => {
  	const foundPath = await findUp(name.packageDirectory, {
  		cwd: absolute.packageDirectory,
-@@ -189,6 +196,7 @@
+@@ -202,6 +209,7 @@
+ 	});
  
  	t.is(foundPath, absolute.packageDirectory);
++	t.end();
+ });
+ 
+ test('sync (cwd)', t => {
+@@ -211,7 +219,9 @@
+ 	});
+ 
+ 	t.is(foundPath, absolute.packageDirectory);
++	t.end();
  });
 +*/
  
  test('async (cousin file, custom cwd)', async t => {
  	const foundPath = await findUp(name.baz, {
-@@ -196,6 +204,7 @@
+@@ -219,6 +229,7 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -177,7 +181,39 @@ Last-Update: 2020-10-30
  });
  
  test('sync (cousin file, custom cwd)', t => {
-@@ -204,20 +213,24 @@
+@@ -227,6 +238,7 @@
+ 	});
+ 
+ 	t.is(foundPath, absolute.baz);
++	t.end();
+ });
+ 
+ test('async (cousin file, custom cwd with stopAt)', async t => {
+@@ -236,6 +248,7 @@
+ 	});
+ 
+ 	t.is(foundPath, undefined);
++	t.end();
+ });
+ 
+ test('sync (cousin file, custom cwd with stopAt)', t => {
+@@ -245,6 +258,7 @@
+ 	});
+ 
+ 	t.is(foundPath, undefined);
++	t.end();
+ });
+ 
+ test('async (cousin file, custom cwd, stopAt equal to foundPath)', async t => {
+@@ -254,6 +268,7 @@
+ 	});
+ 
+ 	t.is(foundPath, absolute.baz);
++	t.end();
+ });
+ 
+ test('sync (cousin file, custom cwd, stopAt equal to foundPath)', t => {
+@@ -263,30 +278,35 @@
  	});
  
  	t.is(foundPath, absolute.baz);
@@ -192,25 +228,60 @@ Last-Update: 2020-10-30
  });
  
  test('sync (nested descendant file)', t => {
- 	const foundPath = findUp.sync(relative.baz);
+ 	const foundPath = findUpSync(relative.baz);
  
  	t.is(foundPath, absolute.baz);
 +	t.end();
  });
  
-+/*
  test('async (nested descendant directory)', async t => {
  	const foundPath = await findUp(relative.barDir, {type: 'directory'});
  
-@@ -265,6 +278,7 @@
+ 	t.is(foundPath, absolute.barDir);
++	t.end();
+ });
+ 
+ test('sync (nested descendant directory)', t => {
+ 	const foundPath = findUpSync(relative.barDir, {type: 'directory'});
  
  	t.is(foundPath, absolute.barDir);
++	t.end();
  });
-+*/
+ 
+ test('async (nested descendant directory, custom cwd)', async t => {
+@@ -296,6 +316,7 @@
+ 	});
+ 
+ 	t.is(filePath, absolute.barDir);
++	t.end();
+ });
+ 
+ test('sync (nested descendant directory, custom cwd)', t => {
+@@ -305,6 +326,7 @@
+ 	});
+ 
+ 	t.is(filePath, absolute.barDir);
++	t.end();
+ });
+ 
+ test('async (nested cousin directory, custom cwd)', async t => {
+@@ -314,6 +336,7 @@
+ 	});
+ 
+ 	t.is(foundPath, absolute.barDir);
++	t.end();
+ });
+ 
+ test('sync (nested cousin directory, custom cwd)', t => {
+@@ -323,6 +346,7 @@
+ 	});
+ 
+ 	t.is(foundPath, absolute.barDir);
++	t.end();
+ });
  
  test('async (ancestor directory, custom cwd)', async t => {
- 	const foundPath = await findUp(name.fixtureDirectory, {
-@@ -273,6 +287,7 @@
+@@ -332,6 +356,7 @@
  	});
  
  	t.is(foundPath, absolute.fixtureDirectory);
@@ -218,7 +289,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (ancestor directory, custom cwd)', t => {
-@@ -282,8 +297,10 @@
+@@ -341,8 +366,10 @@
  	});
  
  	t.is(foundPath, absolute.fixtureDirectory);
@@ -229,57 +300,7 @@ Last-Update: 2020-10-30
  test('async (absolute directory)', async t => {
  	const filePath = await findUp(absolute.barDir, {type: 'directory'});
  
-@@ -295,19 +312,23 @@
- 
- 	t.is(filePath, absolute.barDir);
- });
-+*/
- 
- test('async (not found, absolute file)', async t => {
- 	const filePath = await findUp(path.resolve('somenonexistentfile.js'));
- 
- 	t.is(filePath, undefined);
-+	t.end();
- });
- 
- test('sync (not found, absolute file)', t => {
- 	const filePath = findUp.sync(path.resolve('somenonexistentfile.js'));
- 
- 	t.is(filePath, undefined);
-+	t.end();
- });
- 
-+/*
- test('async (absolute directory, disjoint cwd)', async t => {
- 	const filePath = await findUp(absolute.barDir, {
- 		cwd: t.context.disjoint,
-@@ -325,21 +346,25 @@
- 
- 	t.is(filePath, absolute.barDir);
- });
-+*/
- 
- test('async (not found)', async t => {
- 	const foundPath = await findUp('somenonexistentfile.js');
- 
- 	t.is(foundPath, undefined);
-+	t.end();
- });
- 
- test('sync (not found)', t => {
- 	const foundPath = findUp.sync('somenonexistentfile.js');
- 
- 	t.is(foundPath, undefined);
-+	t.end();
- });
- 
- // Both tests start in a disjoint directory. `package.json` should not be found
- // and `undefined` should be returned.
-+/*
- test('async (not found, custom cwd)', async t => {
- 	const foundPath = await findUp(name.packageJson, {
- 		cwd: t.context.disjoint
-@@ -355,6 +380,7 @@
+@@ -498,6 +525,7 @@
  
  	t.is(foundPath, undefined);
  });
@@ -287,15 +308,15 @@ Last-Update: 2020-10-30
  
  test('async (matcher function)', async t => {
  	const cwd = process.cwd();
-@@ -383,6 +409,7 @@
- 	t.is(await findUp(directory => {
- 		return (directory === cwd) && 'package.json';
- 	}, {cwd: absolute.fixtureDirectory}), absolute.packageJson);
+@@ -516,6 +544,7 @@
+ 	t.is(await findUp(directory => (directory !== cwd) && directory, {type: 'directory'}), path.join(cwd, '..'));
+ 
+ 	t.is(await findUp(directory => (directory === cwd) && 'package.json', {cwd: absolute.fixtureDirectory}), absolute.packageJson);
 +	t.end();
  });
  
  test('async (not found, matcher function)', async t => {
-@@ -393,14 +420,16 @@
+@@ -526,14 +555,16 @@
  		t.is(typeof directory, 'string');
  		const stat = await promisify(fs.stat)(directory);
  		t.true(stat.isDirectory());
@@ -313,7 +334,7 @@ Last-Update: 2020-10-30
  test('async (matcher function throws)', async t => {
  	const cwd = process.cwd();
  	const visited = new Set();
-@@ -426,6 +455,7 @@
+@@ -559,6 +590,7 @@
  	t.true(visited.has(cwd));
  	t.is(visited.size, 1);
  });
@@ -321,7 +342,7 @@ Last-Update: 2020-10-30
  
  test('async (matcher function stops early)', async t => {
  	const cwd = process.cwd();
-@@ -436,6 +466,7 @@
+@@ -569,6 +601,7 @@
  	}), undefined);
  	t.true(visited.has(cwd));
  	t.is(visited.size, 1);
@@ -329,15 +350,15 @@ Last-Update: 2020-10-30
  });
  
  test('sync (matcher function)', t => {
-@@ -465,6 +496,7 @@
- 	t.is(findUp.sync(directory => {
- 		return (directory === cwd) && 'package.json';
- 	}, {cwd: absolute.fixtureDirectory}), absolute.packageJson);
+@@ -588,6 +621,7 @@
+ 	t.is(findUpSync(directory => (directory !== cwd) && directory, {type: 'directory'}), path.join(cwd, '..'));
+ 
+ 	t.is(findUpSync(directory => (directory === cwd) && 'package.json', {cwd: absolute.fixtureDirectory}), absolute.packageJson);
 +	t.end();
  });
  
  test('sync (not found, matcher function)', t => {
-@@ -475,12 +507,13 @@
+@@ -598,12 +632,13 @@
  		t.is(typeof directory, 'string');
  		const stat = fs.statSync(directory);
  		t.true(stat.isDirectory());
@@ -352,7 +373,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (matcher function throws)', t => {
-@@ -496,6 +529,7 @@
+@@ -619,6 +654,7 @@
  	});
  	t.true(visited.has(cwd));
  	t.is(visited.size, 1);
@@ -360,7 +381,7 @@ Last-Update: 2020-10-30
  });
  
  test('sync (matcher function stops early)', t => {
-@@ -507,6 +541,7 @@
+@@ -630,6 +666,7 @@
  	}), undefined);
  	t.true(visited.has(cwd));
  	t.is(visited.size, 1);
@@ -368,25 +389,17 @@ Last-Update: 2020-10-30
  });
  
  test('async (check if path exists)', async t => {
-@@ -515,9 +550,10 @@
- 		t.true(await findUp.exists(absolute.fileLink));
- 	}
- 
--	t.true(await findUp.exists(absolute.barDir));
-+	//t.true(await findUp.exists(absolute.barDir));
- 	t.true(await findUp.exists(absolute.packageJson));
- 	t.false(await findUp.exists('fake'));
+@@ -641,6 +678,7 @@
+ 	t.true(await pathExists(absolute.barDir));
+ 	t.true(await pathExists(absolute.packageJson));
+ 	t.false(await pathExists('fake'));
 +	t.end();
  });
  
  test('sync (check if path exists)', t => {
-@@ -526,7 +562,8 @@
- 		t.true(findUp.sync.exists(absolute.fileLink));
- 	}
- 
--	t.true(findUp.sync.exists(absolute.barDir));
-+	//t.true(findUp.sync.exists(absolute.barDir));
- 	t.true(findUp.sync.exists(absolute.packageJson));
- 	t.false(findUp.sync.exists('fake'));
+@@ -652,4 +690,5 @@
+ 	t.true(pathExistsSync(absolute.barDir));
+ 	t.true(pathExistsSync(absolute.packageJson));
+ 	t.false(pathExistsSync('fake'));
 +	t.end();
  });
